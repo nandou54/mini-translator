@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <link rel="stylesheet" href="style.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>translator app</title>
+  </head>
+  <body>
+    <main>
+      <section>
+        <div id="panel">
+          <button id="swap-languages">cambiar</button>
+        </div>
+        <div id="input">
+          <div class="language">
+            <label for="input-lang">Lenguaje</label>
+            <select id="input-lang" name="input-lang"></select>
+          </div>
+          <textarea></textarea>
+          <div class="buttons">
+            <button>escuchar</button>
+          </div>
+        </div>
+        <div id="output">
+          <div class="language">
+            <label for="input-lang">Lenguaje</label>
+            <select id="output-lang" name="output-lang"></select>
+          </div>
+          <textarea readonly></textarea>
+          <div class="buttons">
+            <button>escuchar</button>
+          </div>
+        </div>
+      </section>
+    </main>
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>

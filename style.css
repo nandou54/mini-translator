@@ -1,0 +1,134 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;1,400&display=swap');
+
+body {
+  margin: 0;
+  background-color: rgb(25, 25, 35);
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+}
+
+body * {
+  color: rgb(220, 220, 230);
+
+  font-family: 'Lato', sans-serif;
+  font-size: 18px;
+  line-height: 1.5em;
+}
+
+main {
+  margin: 50px 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+section {
+  width: calc(95% - 10px);
+  padding: 10px 5px;
+  background-color: rgba(60, 60, 70, 0.3);
+
+  border-radius: 10px;
+
+  display: grid;
+  grid-template-areas:
+    'panel panel'
+    'input output';
+  gap: 20px 15px;
+}
+
+#panel {
+  grid-area: panel;
+}
+
+#input {
+  grid-area: input;
+}
+
+#output {
+  grid-area: output;
+}
+
+#input,
+#output {
+  height: 450px;
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+textarea {
+  background-color: rgb(45, 45, 70);
+  font-size: 1.3em;
+  line-height: 1.7em;
+  resize: none;
+
+  height: calc(100% - 46px);
+  width: calc(100% - 46px);
+  padding: 20px;
+
+  border: 3px solid rgb(30, 30, 40);
+  border-radius: 10px;
+}
+
+textarea:focus,
+select:focus,
+option:focus {
+  outline: 0;
+}
+
+.language {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.language select,
+.language option {
+  background-color: rgb(25, 25, 35);
+  padding: 3px 6px;
+
+  border: 3px solid rgb(30, 30, 40);
+  border-radius: 5px;
+}
+
+.buttons {
+  display: flex;
+  gap: 10px;
+}
+
+button {
+  background: rgb(25, 25, 35);
+  border: none;
+  border-radius: 10px;
+
+  padding: 5px;
+}
+
+button:hover {
+  cursor: pointer;
+}
+
+@media (max-width: 600px) {
+  section {
+    flex-direction: column;
+  }
+
+  section > div {
+    width: 100%;
+    height: 300px;
+  }
+}
+
+::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(150, 150, 150, 0.25);
+}
