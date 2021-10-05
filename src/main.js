@@ -1,10 +1,7 @@
-import dotenv from 'dotenv'
 import qs from 'qs'
-import { languageNames } from './constants'
-import { initLanguages, translate } from './services'
+import { SPELL_LANGUAGES, languageNames } from './constants'
+import { initLanguages, translate, spellText } from './services'
 import { debounce } from './utils'
-
-dotenv.config()
 
 const $ = (selector) => document.querySelector(selector)
 
@@ -13,6 +10,8 @@ const $output = $('#output textarea')
 const $inputLanguages = $('#input-lang')
 const $outputLanguages = $('#output-lang')
 const $swapLanguagesButton = $('#swap-languages')
+const $spellInputButton = $('#spell-input')
+const $spellOutputButton = $('#spell-output')
 
 window.addEventListener('load', () => {
   initLanguages()
@@ -57,4 +56,54 @@ $swapLanguagesButton.addEventListener('click', () => {
   tempValue = $output.value
   $output.value = $input.value
   $input.value = tempValue
+})
+
+$spellInputButton.addEventListener('click', () => {
+  if (!$input.value) {
+    return console.log('no hay texto')
+  }
+
+  const inputLanguage = $inputLanguages.value
+  const language = SPELL_LANGUAGES.find((language) => language.startsWith(inputLanguage))
+
+  if (!language) {
+    return console.log('ningún lenguaje para traducir')
+  }
+
+  const data = {
+    hl: language,
+    src: $input.value
+  }
+
+  spellText(data)
+    .then((response) => {
+      const music = new Audio(response.data)
+      music.play()
+    })
+    .catch(console.log)
+})
+
+$spellOutputButton.addEventListener('click', () => {
+  if (!$output.value) {
+    return console.log('no hay texto')
+  }
+
+  const outputLanguage = $outputLanguages.value
+  const language = SPELL_LANGUAGES.find((language) => language.startsWith(outputLanguage))
+
+  if (!language) {
+    return console.log('ningún lenguaje para traducir')
+  }
+
+  const data = {
+    hl: language,
+    src: $output.value
+  }
+
+  spellText(data)
+    .then((response) => {
+      const music = new Audio(response.data)
+      music.play()
+    })
+    .catch(console.log)
 })

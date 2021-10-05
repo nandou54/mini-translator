@@ -1,4 +1,29 @@
-const languages = [
+const TRANSLATE_API_KEY = import.meta.env.VITE_TRANSLATE_API_KEY
+
+const SPELL_API_KEY = import.meta.env.VITE_SPELL_API_KEY
+
+const TRANSLATE_API_URL = 'https://google-translate1.p.rapidapi.com/language/translate/v2'
+
+const SPELL_API_URL = 'https://voicerss-text-to-speech.p.rapidapi.com/'
+
+const TRANSLATE_API_OPTIONS = {
+  headers: {
+    'content-type': 'application/x-www-form-urlencoded',
+    'x-rapidapi-host': 'google-translate1.p.rapidapi.com',
+    'x-rapidapi-key': TRANSLATE_API_KEY
+  }
+}
+
+const SPELL_API_OPTIONS = {
+  headers: {
+    'content-type': 'application/x-www-form-urlencoded',
+    'x-rapidapi-host': 'voicerss-text-to-speech.p.rapidapi.com',
+    'x-rapidapi-key': TRANSLATE_API_KEY
+  },
+  params: { key: SPELL_API_KEY, b64: true }
+}
+
+const SPELL_LANGUAGES = [
   'ar-eg',
   'ar-sa',
   'bg-bg',
@@ -50,16 +75,13 @@ const languages = [
   'vi-vn'
 ]
 
-const options = {
-  headers: {
-    'content-type': 'application/x-www-form-urlencoded',
-    'x-rapidapi-host': 'google-translate1.p.rapidapi.com',
-    'x-rapidapi-key': process.env.TRANSLATE_API_URL
-  }
-}
-
 const languageNames = new Intl.DisplayNames(['es'], { type: 'language' })
 
-const TRANSLATE_API_URL = 'https://google-translate1.p.rapidapi.com/language/translate/v2'
-
-export { options, languageNames, languages, TRANSLATE_API_URL }
+export {
+  TRANSLATE_API_URL,
+  SPELL_API_URL,
+  TRANSLATE_API_OPTIONS,
+  SPELL_API_OPTIONS,
+  SPELL_LANGUAGES,
+  languageNames
+}

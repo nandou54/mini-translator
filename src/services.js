@@ -1,12 +1,23 @@
 import axios from 'axios'
-import { options, TRANSLATE_API_URL } from './constants'
+import {
+  TRANSLATE_API_URL,
+  SPELL_API_URL,
+  TRANSLATE_API_OPTIONS,
+  SPELL_API_OPTIONS
+} from './constants'
 
 function initLanguages() {
-  return axios.get(`${TRANSLATE_API_URL}/languages`, options)
+  return axios.get(`${TRANSLATE_API_URL}/languages`, TRANSLATE_API_OPTIONS)
 }
 
 function translate(data) {
-  return axios.post(TRANSLATE_API_URL, data, options)
+  return axios.post(TRANSLATE_API_URL, data, TRANSLATE_API_OPTIONS)
 }
 
-export { initLanguages, translate }
+function spellText(data) {
+  const params = { ...SPELL_API_OPTIONS.params, ...data }
+  console.log(params)
+  return axios.post(SPELL_API_URL, {}, { ...SPELL_API_OPTIONS, params })
+}
+
+export { initLanguages, translate, spellText }
