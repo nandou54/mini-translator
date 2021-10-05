@@ -1,7 +1,6 @@
-import qs from 'qs'
 import { SPELL_LANGUAGES, languageNames } from './constants'
 import { initLanguages, translate, spellText } from './services'
-import { debounce } from './utils'
+import { debounce, getSound } from './utils'
 
 const $ = (selector) => document.querySelector(selector)
 
@@ -13,26 +12,25 @@ const $swapLanguagesButton = $('#swap-languages')
 const $spellInputButton = $('#spell-input')
 const $spellOutputButton = $('#spell-output')
 
-let inputSound, outputSound
-let inputHasChanged = false
-
 const initApp = () => {
   initLanguages()
     .then((response) => {
-      response.data.data.languages.forEach(({ language }) => {
+      response.data.languages.forEach(({ language }) => {
         const $language = document.createElement('option')
         $language.value = language
         $language.innerText = languageNames.of(language)
 
         $inputLanguages.appendChild($language)
         $outputLanguages.appendChild($language.cloneNode(true))
+
+        $input.value = localStorage.getItem('input') || ''
+        $inputLanguages.value = localStorage.getItem('inputLanguage') || 'es'
+        $outputLanguages.value = localStorage.getItem('outputLanguage') || 'en'
+
+        handleTranslate()
       })
     })
     .catch(console.log)
-
-  $input.value = localStorage.getItem('input') || '¡Introduce un texto y tradúcelo!'
-  $inputLanguages.value = localStorage.getItem('inputLanguage') || 'es'
-  $outputLanguages.value = localStorage.getItem('outputLanguage') || 'en'
 }
 
 const handleChangeLanguage = () => {
@@ -42,6 +40,8 @@ const handleChangeLanguage = () => {
 
   localStorage.setItem('inputLanguage', $inputLanguages.value)
   localStorage.setItem('outputLanguage', $outputLanguages.value)
+
+  handleTranslate()
 }
 
 const handleSwapLanguages = () => {
@@ -58,30 +58,25 @@ const handleSwapLanguages = () => {
 }
 
 const handleTranslate = debounce(() => {
-  localStorage.setItem('input', $outputLanguages.value)
-  inputHasChanged = true
+  localStorage.setItem('input', $input.value)
 
-  const data = qs.stringify({
+  const data = {
     q: $input.value,
     source: $inputLanguages.value,
     target: $outputLanguages.value
-  })
+  }
+
+  $output.classList.add('translating')
 
   translate(data)
     .then((response) => {
-      $output.value = response.data.data.translations[0].translatedText
+      $output.value = response.data.data.translations.translatedText
+      $output.classList.remove('translating')
     })
     .catch(console.log)
 })
 
-const playSound = (sound) => {
-  const music = new Audio(sound)
-  music.play()
-}
-
 const handleSpellInput = () => {
-  if (!inputHasChanged) return playSound(inputSound)
-
   if (!$input.value) {
     return console.log('no hay texto')
   }
@@ -98,18 +93,18 @@ const handleSpellInput = () => {
     src: $input.value
   }
 
+  $spellInputButton.classList.add('active')
+
   spellText(data)
     .then(({ data }) => {
-      inputHasChanged = false
-      inputSound = data
-      playSound(data)
+      const sound = getSound(data)
+      sound.onended = () => $spellInputButton.classList.remove('active')
+      sound.play()
     })
     .catch(console.log)
 }
 
 const handleSpellOutput = () => {
-  if (!inputHasChanged) return playSound(outputSound)
-
   if (!$output.value) {
     return console.log('no hay texto')
   }
@@ -126,11 +121,13 @@ const handleSpellOutput = () => {
     src: $output.value
   }
 
+  $spellOutputButton.classList.add('active')
+
   spellText(data)
     .then(({ data }) => {
-      inputHasChanged = false
-      outputSound = data
-      playSound(data)
+      const sound = getSound(data)
+      sound.onended = () => $spellOutputButton.classList.remove('active')
+      sound.play()
     })
     .catch(console.log)
 }

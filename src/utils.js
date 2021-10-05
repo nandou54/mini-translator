@@ -1,4 +1,4 @@
-function debounce(func, timeout = 300) {
+function debounce(func, timeout = 800) {
   let timer
   return (...args) => {
     clearTimeout(timer)
@@ -8,4 +8,8 @@ function debounce(func, timeout = 300) {
   }
 }
 
-export { debounce }
+function getSound(sound) {
+  return new Audio(sound)
+}
+
+export { debounce, getSound }

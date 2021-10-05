@@ -2,16 +2,23 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="https://img.icons8.com/color/48/000000/translate-app.png"
+    />
     <link rel="stylesheet" href="style.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>translator app</title>
   </head>
   <body>
     <main>
+      <header>Translator app</header>
       <section>
         <div id="panel">
-          <button id="swap-languages">cambiar</button>
+          <button id="swap-languages">
+            <img src="https://img.icons8.com/ios-glyphs/24/DDDDDD/change--v1.png" />
+          </button>
         </div>
         <div id="input">
           <div class="language">
@@ -20,7 +27,9 @@
           </div>
           <textarea></textarea>
           <div class="buttons">
-            <button id="spell-input">escuchar</button>
+            <button id="spell-input">
+              <img src="https://img.icons8.com/ios-filled/24/DDDDDD/room-sound.png" />
+            </button>
           </div>
         </div>
         <div id="output">
@@ -30,10 +39,18 @@
           </div>
           <textarea readonly></textarea>
           <div class="buttons">
-            <button id="spell-output">escuchar</button>
+            <button id="spell-output">
+              <img src="https://img.icons8.com/ios-filled/24/DDDDDD/room-sound.png" />
+            </button>
           </div>
         </div>
       </section>
+      <footer>
+        <div>Icons by <a href="https://icons8.com/">icons8</a></div>
+        <div>
+          <a href="https://github.com/pabloc54/translator">Source</a>
+        </div>
+      </footer>
     </main>
     <script type="module" src="./src/main.js"></script>
   </body>

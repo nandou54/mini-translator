@@ -1,16 +1,15 @@
-const TRANSLATE_API_KEY = import.meta.env.VITE_TRANSLATE_API_KEY
-
+const RAPID_API_KEY = import.meta.env.VITE_RAPID_API_KEY
 const SPELL_API_KEY = import.meta.env.VITE_SPELL_API_KEY
 
-const TRANSLATE_API_URL = 'https://google-translate1.p.rapidapi.com/language/translate/v2'
+const TRANSLATE_API_URL = 'https://deep-translate1.p.rapidapi.com/language/translate/v2'
 
 const SPELL_API_URL = 'https://voicerss-text-to-speech.p.rapidapi.com/'
 
 const TRANSLATE_API_OPTIONS = {
   headers: {
-    'content-type': 'application/x-www-form-urlencoded',
-    'x-rapidapi-host': 'google-translate1.p.rapidapi.com',
-    'x-rapidapi-key': TRANSLATE_API_KEY
+    'content-type': 'application/json',
+    'x-rapidapi-host': 'deep-translate1.p.rapidapi.com',
+    'x-rapidapi-key': RAPID_API_KEY
   }
 }
 
@@ -18,7 +17,7 @@ const SPELL_API_OPTIONS = {
   headers: {
     'content-type': 'application/x-www-form-urlencoded',
     'x-rapidapi-host': 'voicerss-text-to-speech.p.rapidapi.com',
-    'x-rapidapi-key': TRANSLATE_API_KEY
+    'x-rapidapi-key': RAPID_API_KEY
   },
   params: { key: SPELL_API_KEY, b64: true }
 }
