@@ -16,7 +16,6 @@ function translate(data) {
 
 function spellText(data) {
   const params = { ...SPELL_API_OPTIONS.params, ...data }
-  console.log(params)
   return axios.post(SPELL_API_URL, {}, { ...SPELL_API_OPTIONS, params })
 }
 

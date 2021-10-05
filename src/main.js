@@ -13,7 +13,10 @@ const $swapLanguagesButton = $('#swap-languages')
 const $spellInputButton = $('#spell-input')
 const $spellOutputButton = $('#spell-output')
 
-window.addEventListener('load', () => {
+let inputSound, outputSound
+let inputHasChanged = false
+
+const initApp = () => {
   initLanguages()
     .then((response) => {
       response.data.data.languages.forEach(({ language }) => {
@@ -27,28 +30,21 @@ window.addEventListener('load', () => {
     })
     .catch(console.log)
 
-  $inputLanguages.value = 'es'
-  $outputLanguages.value = 'en'
-})
+  $input.value = localStorage.getItem('input') || '¡Introduce un texto y tradúcelo!'
+  $inputLanguages.value = localStorage.getItem('inputLanguage') || 'es'
+  $outputLanguages.value = localStorage.getItem('outputLanguage') || 'en'
+}
 
-$input.addEventListener(
-  'keypress',
-  debounce((e) => {
-    const data = qs.stringify({
-      q: $input.value,
-      source: $inputLanguages.value,
-      target: $outputLanguages.value
-    })
+const handleChangeLanguage = () => {
+  if ($inputLanguages.value === $outputLanguages.value) {
+    return handleSwapLanguages()
+  }
 
-    translate(data)
-      .then((response) => {
-        $output.value = response.data.data.translations[0].translatedText
-      })
-      .catch(console.log)
-  })
-)
+  localStorage.setItem('inputLanguage', $inputLanguages.value)
+  localStorage.setItem('outputLanguage', $outputLanguages.value)
+}
 
-$swapLanguagesButton.addEventListener('click', () => {
+const handleSwapLanguages = () => {
   let tempValue = $outputLanguages.value
   $outputLanguages.value = $inputLanguages.value
   $inputLanguages.value = tempValue
@@ -56,9 +52,36 @@ $swapLanguagesButton.addEventListener('click', () => {
   tempValue = $output.value
   $output.value = $input.value
   $input.value = tempValue
+
+  localStorage.setItem('inputLanguage', $inputLanguages.value)
+  localStorage.setItem('outputLanguage', $outputLanguages.value)
+}
+
+const handleTranslate = debounce(() => {
+  localStorage.setItem('input', $outputLanguages.value)
+  inputHasChanged = true
+
+  const data = qs.stringify({
+    q: $input.value,
+    source: $inputLanguages.value,
+    target: $outputLanguages.value
+  })
+
+  translate(data)
+    .then((response) => {
+      $output.value = response.data.data.translations[0].translatedText
+    })
+    .catch(console.log)
 })
 
-$spellInputButton.addEventListener('click', () => {
+const playSound = (sound) => {
+  const music = new Audio(sound)
+  music.play()
+}
+
+const handleSpellInput = () => {
+  if (!inputHasChanged) return playSound(inputSound)
+
   if (!$input.value) {
     return console.log('no hay texto')
   }
@@ -76,14 +99,17 @@ $spellInputButton.addEventListener('click', () => {
   }
 
   spellText(data)
-    .then((response) => {
-      const music = new Audio(response.data)
-      music.play()
+    .then(({ data }) => {
+      inputHasChanged = false
+      inputSound = data
+      playSound(data)
     })
     .catch(console.log)
-})
+}
 
-$spellOutputButton.addEventListener('click', () => {
+const handleSpellOutput = () => {
+  if (!inputHasChanged) return playSound(outputSound)
+
   if (!$output.value) {
     return console.log('no hay texto')
   }
@@ -101,9 +127,18 @@ $spellOutputButton.addEventListener('click', () => {
   }
 
   spellText(data)
-    .then((response) => {
-      const music = new Audio(response.data)
-      music.play()
+    .then(({ data }) => {
+      inputHasChanged = false
+      outputSound = data
+      playSound(data)
     })
     .catch(console.log)
-})
+}
+
+window.addEventListener('load', initApp)
+$inputLanguages.addEventListener('change', handleChangeLanguage)
+$outputLanguages.addEventListener('change', handleChangeLanguage)
+$swapLanguagesButton.addEventListener('click', handleSwapLanguages)
+$input.addEventListener('keypress', handleTranslate)
+$spellInputButton.addEventListener('click', handleSpellInput)
+$spellOutputButton.addEventListener('click', handleSpellOutput)
