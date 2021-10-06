@@ -6,15 +6,25 @@ const $ = (selector) => document.querySelector(selector)
 
 const $input = $('#input textarea')
 const $output = $('#output textarea')
+
 const $inputLanguages = $('#input-lang')
 const $outputLanguages = $('#output-lang')
 const $swapLanguagesButton = $('#swap-languages')
+
 const $spellInputButton = $('#spell-input')
 const $spellOutputButton = $('#spell-output')
+
+const $spellInputLanguages = $('#spell-input-lang')
+const $spellOutputLanguages = $('#spell-output-lang')
+const $copyOutputButton = $('#copy-output')
 
 const initApp = () => {
   initLanguages()
     .then((response) => {
+      response.data.languages.sort((a, b) =>
+        languageNames.of(a.language) > languageNames.of(b.language) ? 1 : -1
+      )
+
       response.data.languages.forEach(({ language }) => {
         const $language = document.createElement('option')
         $language.value = language
@@ -27,6 +37,8 @@ const initApp = () => {
         $inputLanguages.value = localStorage.getItem('inputLanguage') || 'es'
         $outputLanguages.value = localStorage.getItem('outputLanguage') || 'en'
 
+        handleInputSpellLanguages()
+        handleOutputSpellLanguages()
         handleTranslate()
       })
     })
@@ -34,13 +46,11 @@ const initApp = () => {
 }
 
 const handleChangeLanguage = () => {
-  if ($inputLanguages.value === $outputLanguages.value) {
-    return handleSwapLanguages()
-  }
-
   localStorage.setItem('inputLanguage', $inputLanguages.value)
   localStorage.setItem('outputLanguage', $outputLanguages.value)
 
+  handleInputSpellLanguages()
+  handleOutputSpellLanguages()
   handleTranslate()
 }
 
@@ -55,6 +65,9 @@ const handleSwapLanguages = () => {
 
   localStorage.setItem('inputLanguage', $inputLanguages.value)
   localStorage.setItem('outputLanguage', $outputLanguages.value)
+
+  handleInputSpellLanguages()
+  handleOutputSpellLanguages()
 }
 
 const handleTranslate = debounce(() => {
@@ -76,16 +89,67 @@ const handleTranslate = debounce(() => {
     .catch(console.log)
 })
 
-const handleSpellInput = () => {
-  if (!$input.value) {
-    return console.log('no hay texto')
+const handleInputSpellLanguages = () => {
+  $spellInputLanguages.innerHTML = ''
+  $spellInputLanguages.disabled = true
+
+  const languages = SPELL_LANGUAGES.filter((language) =>
+    language.startsWith($inputLanguages.value)
+  )
+
+  if (!languages.length) {
+    const $empty = document.createElement('option')
+    $empty.value = ''
+    $empty.innerText = 'Lenguaje no disponible'
+
+    $spellInputLanguages.appendChild($empty)
+    return
   }
 
-  const inputLanguage = $inputLanguages.value
-  const language = SPELL_LANGUAGES.find((language) => language.startsWith(inputLanguage))
+  $spellInputLanguages.disabled = false
 
-  if (!language) {
-    return console.log('ningún lenguaje para traducir')
+  languages.forEach((language) => {
+    const spellLanguage = document.createElement('option')
+    spellLanguage.value = language
+    spellLanguage.innerText = languageNames.of(language)
+
+    $spellInputLanguages.appendChild(spellLanguage)
+  })
+}
+
+const handleOutputSpellLanguages = () => {
+  $spellOutputLanguages.innerHTML = ''
+  $spellOutputLanguages.disabled = true
+
+  const languages = SPELL_LANGUAGES.filter((language) =>
+    language.startsWith($outputLanguages.value)
+  )
+
+  if (!languages.length) {
+    const $empty = document.createElement('option')
+    $empty.value = ''
+    $empty.innerText = 'Lenguaje no disponible'
+
+    $spellOutputLanguages.appendChild($empty)
+    return
+  }
+
+  $spellOutputLanguages.disabled = false
+
+  languages.forEach((language) => {
+    const spellLanguage = document.createElement('option')
+    spellLanguage.value = language
+    spellLanguage.innerText = languageNames.of(language)
+
+    $spellOutputLanguages.appendChild(spellLanguage)
+  })
+}
+
+const handleSpellInput = () => {
+  const language = $spellInputLanguages.value
+
+  if (!$input.value || !language) {
+    return
   }
 
   const data = {
@@ -105,15 +169,10 @@ const handleSpellInput = () => {
 }
 
 const handleSpellOutput = () => {
-  if (!$output.value) {
-    return console.log('no hay texto')
-  }
+  const language = $spellOutputLanguages.value
 
-  const outputLanguage = $outputLanguages.value
-  const language = SPELL_LANGUAGES.find((language) => language.startsWith(outputLanguage))
-
-  if (!language) {
-    return console.log('ningún lenguaje para traducir')
+  if (!$input.value || !language) {
+    return
   }
 
   const data = {
@@ -132,6 +191,12 @@ const handleSpellOutput = () => {
     .catch(console.log)
 }
 
+const handleCopyOutput = () => {
+  $output.select()
+  $output.setSelectionRange(0, 99_999)
+  navigator.clipboard.writeText($output.value)
+}
+
 window.addEventListener('load', initApp)
 $inputLanguages.addEventListener('change', handleChangeLanguage)
 $outputLanguages.addEventListener('change', handleChangeLanguage)
@@ -139,3 +204,4 @@ $swapLanguagesButton.addEventListener('click', handleSwapLanguages)
 $input.addEventListener('keypress', handleTranslate)
 $spellInputButton.addEventListener('click', handleSpellInput)
 $spellOutputButton.addEventListener('click', handleSpellOutput)
+$copyOutputButton.addEventListener('click', handleCopyOutput)

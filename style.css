@@ -27,20 +27,25 @@ main {
 
 header {
   width: 95%;
-  padding: 20px 0;
+  padding: 20px 0 10px;
 
   text-align: left;
 
   font-size: 1.4em;
   font-weight: 700;
+
+  display: flex;
+  align-items: center;
+  gap: 15px;
 }
 
 section {
-  width: calc(95% - 30px);
+  width: calc(100% - 30px);
   padding: 15px;
   background-color: rgba(60, 60, 70, 0.3);
 
   display: grid;
+  grid-template-columns: 1fr 1fr;
   grid-template-areas:
     'panel panel'
     'input output';
@@ -61,7 +66,7 @@ section {
 
 #input,
 #output {
-  height: 400px;
+  height: 380px;
   position: relative;
 
   display: flex;
@@ -99,8 +104,8 @@ option:focus {
   gap: 20px;
 }
 
-.language select,
-.language option {
+select,
+option {
   background-color: rgb(25, 25, 35);
   padding: 3px 6px;
 
@@ -143,9 +148,14 @@ footer {
   justify-content: space-evenly;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 700px) {
   section {
-    flex-direction: column;
+    grid-template-columns: 1fr;
+    grid-template-rows: 50px 1fr 1fr;
+    grid-template-areas:
+      'panel'
+      'input'
+      'output';
   }
 
   section > div {

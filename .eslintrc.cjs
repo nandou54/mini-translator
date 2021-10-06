@@ -9,6 +9,7 @@ module.exports = {
     sourceType: 'module'
   },
   rules: {
-    'space-before-function-paren': 'off'
+    'space-before-function-paren': 'off',
+    'add-numeric-separator': 'off'
   }
 }

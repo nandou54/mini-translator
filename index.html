@@ -4,16 +4,19 @@
     <meta charset="UTF-8" />
     <link
       rel="icon"
-      type="image/svg+xml"
-      href="https://img.icons8.com/color/48/000000/translate-app.png"
+      type="image/png"
+      href="https://img.icons8.com/color/48/000000/language-skill.png"
     />
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="./style.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>translator app</title>
+    <title>Mini Translator</title>
   </head>
   <body>
     <main>
-      <header>Translator app</header>
+      <header>
+        <img src="https://img.icons8.com/color/55/000000/language-skill.png" /> Mini
+        Translator
+      </header>
       <section>
         <div id="panel">
           <button id="swap-languages">
@@ -25,11 +28,12 @@
             <label for="input-lang">Lenguaje</label>
             <select id="input-lang" name="input-lang"></select>
           </div>
-          <textarea></textarea>
+          <textarea placeholder="¡Traduce lo que quieras!"></textarea>
           <div class="buttons">
-            <button id="spell-input">
+            <button id="spell-input" title="Escuchar input">
               <img src="https://img.icons8.com/ios-filled/24/DDDDDD/room-sound.png" />
             </button>
+            <select id="spell-input-lang"></select>
           </div>
         </div>
         <div id="output">
@@ -37,11 +41,15 @@
             <label for="input-lang">Lenguaje</label>
             <select id="output-lang" name="output-lang"></select>
           </div>
-          <textarea readonly></textarea>
+          <textarea placeholder="Translation..." readonly></textarea>
           <div class="buttons">
-            <button id="spell-output">
+            <button id="copy-output" title="Copiar output">
+              <img src="https://img.icons8.com/ios-glyphs/24/DDDDDD/copy.png" />
+            </button>
+            <button id="spell-output" title="Escuchar output">
               <img src="https://img.icons8.com/ios-filled/24/DDDDDD/room-sound.png" />
             </button>
+            <select id="spell-output-lang"></select>
           </div>
         </div>
       </section>
