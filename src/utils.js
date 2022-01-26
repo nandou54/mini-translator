@@ -8,8 +8,4 @@ function debounce(func, timeout = 800) {
   }
 }
 
-function getSound(sound) {
-  return new Audio(sound)
-}
-
-export { debounce, getSound }
+export { debounce }

@@ -1,6 +1,6 @@
 import { SPELL_LANGUAGES, languageNames } from './constants'
 import { initLanguages, translate, spellText } from './services'
-import { debounce, getSound } from './utils'
+import { debounce } from './utils'
 
 const $ = (selector) => document.querySelector(selector)
 
@@ -161,7 +161,7 @@ const handleSpellInput = () => {
 
   spellText(data)
     .then(({ data }) => {
-      const sound = getSound(data)
+      const sound = new Audio(data)
       sound.onended = () => $spellInputButton.classList.remove('active')
       sound.play()
     })
@@ -184,7 +184,7 @@ const handleSpellOutput = () => {
 
   spellText(data)
     .then(({ data }) => {
-      const sound = getSound(data)
+      const sound = new Audio(data)
       sound.onended = () => $spellOutputButton.classList.remove('active')
       sound.play()
     })

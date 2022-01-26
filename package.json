@@ -15,8 +15,7 @@
     "vite": "2.6.0"
   },
   "dependencies": {
-    "axios": "0.22.0",
-    "qs": "6.10.1"
+    "axios": "0.25.0"
   },
   "type": "module",
   "license": "MIT"
