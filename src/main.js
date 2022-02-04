@@ -179,3 +179,7 @@ $input.addEventListener('keypress', handleTranslate)
 $spellInputButton.addEventListener('click', handleSpellInput)
 $spellOutputButton.addEventListener('click', handleSpellOutput)
 $copyOutputButton.addEventListener('click', handleCopyOutput)
+speechSynthesis.onvoiceschanged = () => {
+  handleInputSpellLanguages()
+  handleOutputSpellLanguages()
+}
