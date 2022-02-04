@@ -1,5 +1,5 @@
-import { SPELL_LANGUAGES, languageNames } from './constants'
-import { initLanguages, translate, spellText } from './services'
+import { languageNames } from './constants'
+import { initLanguages, spellText, translateText } from './services'
 import { debounce } from './utils'
 
 const $ = (selector) => document.querySelector(selector)
@@ -36,11 +36,11 @@ const initApp = () => {
         $input.value = localStorage.getItem('input') || ''
         $inputLanguages.value = localStorage.getItem('inputLanguage') || 'es'
         $outputLanguages.value = localStorage.getItem('outputLanguage') || 'en'
-
-        handleInputSpellLanguages()
-        handleOutputSpellLanguages()
-        handleTranslate()
       })
+
+      handleInputSpellLanguages()
+      handleOutputSpellLanguages()
+      handleTranslate()
     })
     .catch(console.log)
 }
@@ -81,7 +81,7 @@ const handleTranslate = debounce(() => {
 
   $output.classList.add('translating')
 
-  translate(data)
+  translateText(data)
     .then((response) => {
       $output.value = response.data.data.translations.translatedText
       $output.classList.remove('translating')
@@ -93,6 +93,7 @@ const handleInputSpellLanguages = () => {
   $spellInputLanguages.innerHTML = ''
   $spellInputLanguages.disabled = true
 
+  const SPELL_LANGUAGES = speechSynthesis.getVoices().map(voice => voice.lang)
   const languages = SPELL_LANGUAGES.filter((language) =>
     language.startsWith($inputLanguages.value)
   )
@@ -121,6 +122,7 @@ const handleOutputSpellLanguages = () => {
   $spellOutputLanguages.innerHTML = ''
   $spellOutputLanguages.disabled = true
 
+  const SPELL_LANGUAGES = speechSynthesis.getVoices().map(voice => voice.lang)
   const languages = SPELL_LANGUAGES.filter((language) =>
     language.startsWith($outputLanguages.value)
   )
@@ -147,48 +149,20 @@ const handleOutputSpellLanguages = () => {
 
 const handleSpellInput = () => {
   const language = $spellInputLanguages.value
-
-  if (!$input.value || !language) {
-    return
-  }
-
-  const data = {
-    hl: language,
-    src: $input.value
-  }
+  if (!$input.value || !language) return
 
   $spellInputButton.classList.add('active')
 
-  spellText(data)
-    .then(({ data }) => {
-      const sound = new Audio(data)
-      sound.onended = () => $spellInputButton.classList.remove('active')
-      sound.play()
-    })
-    .catch(console.log)
+  spellText($input.value, language)
 }
 
 const handleSpellOutput = () => {
   const language = $spellOutputLanguages.value
-
-  if (!$input.value || !language) {
-    return
-  }
-
-  const data = {
-    hl: language,
-    src: $output.value
-  }
+  if (!$output.value || !language) return
 
   $spellOutputButton.classList.add('active')
 
-  spellText(data)
-    .then(({ data }) => {
-      const sound = new Audio(data)
-      sound.onended = () => $spellOutputButton.classList.remove('active')
-      sound.play()
-    })
-    .catch(console.log)
+  spellText($output.value, language)
 }
 
 const handleCopyOutput = () => {
