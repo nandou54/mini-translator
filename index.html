@@ -2,11 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link
-      rel="icon"
-      type="image/png"
-      href="https://img.icons8.com/color/48/000000/language-skill.png"
-    />
+    <link rel="icon" type="image/png" href="assets/icon.svg" />
     <link rel="stylesheet" href="./style.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Mini Translator</title>
@@ -14,13 +10,18 @@
   <body>
     <main>
       <header>
-        <img src="https://img.icons8.com/color/55/000000/language-skill.png" /> Mini
-        Translator
+        <object
+          data="assets/icon.svg"
+          type="image/svg+xml"
+          width="60"
+          height="60"
+        ></object>
+        Mini Translator
       </header>
       <section>
         <div id="panel">
           <button id="swap-languages">
-            <img src="https://img.icons8.com/ios-glyphs/24/DDDDDD/change--v1.png" />
+            <object data="assets/swap.svg" type="image/svg+xml"></object>
           </button>
         </div>
         <div id="input">
@@ -31,7 +32,7 @@
           <textarea placeholder="¡Traduce lo que quieras!"></textarea>
           <div class="buttons">
             <button id="spell-input" title="Escuchar input">
-              <img src="https://img.icons8.com/ios-filled/24/DDDDDD/room-sound.png" />
+              <object data="assets/sound.svg" type="image/svg+xml"></object>
             </button>
             <select id="spell-input-lang"></select>
           </div>
@@ -44,19 +45,18 @@
           <textarea placeholder="Translation..." readonly></textarea>
           <div class="buttons">
             <button id="copy-output" title="Copiar output">
-              <img src="https://img.icons8.com/ios-glyphs/24/DDDDDD/copy.png" />
+              <object data="assets/copy.svg" type="image/svg+xml"></object>
             </button>
             <button id="spell-output" title="Escuchar output">
-              <img src="https://img.icons8.com/ios-filled/24/DDDDDD/room-sound.png" />
+              <object data="assets/sound.svg" type="image/svg+xml"></object>
             </button>
             <select id="spell-output-lang"></select>
           </div>
         </div>
       </section>
       <footer>
-        <div>Icons by <a href="https://icons8.com/">icons8</a></div>
         <div>
-          <a href="https://github.com/pabloc54/translator">Source</a>
+          <a href="https://github.com/nanndo54/translator">Source</a>
         </div>
       </footer>
     </main>

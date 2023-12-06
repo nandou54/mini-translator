@@ -21,11 +21,11 @@ const $copyOutputButton = $('#copy-output')
 const initApp = () => {
   initLanguages()
     .then((response) => {
-      response.data.languages.sort((a, b) =>
+      response.data.data.languages.sort((a, b) =>
         languageNames.of(a.language) > languageNames.of(b.language) ? 1 : -1
       )
 
-      response.data.languages.forEach(({ language }) => {
+      response.data.data.languages.forEach(({ language }) => {
         const $language = document.createElement('option')
         $language.value = language
         $language.innerText = languageNames.of(language)
@@ -72,28 +72,34 @@ const handleSwapLanguages = () => {
 
 const handleTranslate = debounce(() => {
   localStorage.setItem('input', $input.value)
+  if ($input.value === '') {
+    $output.value = ''
+    return
+  }
 
-  const data = {
+  const data = new URLSearchParams({
     q: $input.value,
     source: $inputLanguages.value,
     target: $outputLanguages.value
-  }
+  })
 
   $output.classList.add('translating')
 
   translateText(data)
     .then((response) => {
-      $output.value = response.data.data.translations.translatedText
-      $output.classList.remove('translating')
+      $output.value = response.data.data.translations[0].translatedText
     })
     .catch(console.log)
+    .finally(() => {
+      $output.classList.remove('translating')
+    })
 })
 
 const handleInputSpellLanguages = () => {
   $spellInputLanguages.innerHTML = ''
   $spellInputLanguages.disabled = true
 
-  const SPELL_LANGUAGES = speechSynthesis.getVoices().map(voice => voice.lang)
+  const SPELL_LANGUAGES = speechSynthesis.getVoices().map((voice) => voice.lang)
   const languages = SPELL_LANGUAGES.filter((language) =>
     language.startsWith($inputLanguages.value)
   )
@@ -122,7 +128,7 @@ const handleOutputSpellLanguages = () => {
   $spellOutputLanguages.innerHTML = ''
   $spellOutputLanguages.disabled = true
 
-  const SPELL_LANGUAGES = speechSynthesis.getVoices().map(voice => voice.lang)
+  const SPELL_LANGUAGES = speechSynthesis.getVoices().map((voice) => voice.lang)
   const languages = SPELL_LANGUAGES.filter((language) =>
     language.startsWith($outputLanguages.value)
   )

@@ -15,6 +15,7 @@ body * {
   font-family: 'Lato', sans-serif;
   font-size: 18px;
   line-height: 1.5em;
+  box-sizing: border-box;
 }
 
 main {
@@ -27,7 +28,8 @@ main {
 
 header {
   width: 95%;
-  padding: 20px 0 10px;
+  padding: 30px 0 30px;
+  margin-bottom: 30px;
 
   text-align: left;
 
@@ -50,6 +52,10 @@ section {
     'panel panel'
     'input output';
   gap: 20px;
+}
+
+section > div {
+  width: 100%;
 }
 
 #panel {
@@ -80,8 +86,8 @@ textarea {
   line-height: 1.7em;
   resize: none;
 
-  height: calc(100% - 46px);
-  width: calc(100% - 46px);
+  height: 100%;
+  width: 100%;
   padding: 20px;
 
   border: 3px solid rgb(30, 30, 40);
@@ -95,7 +101,7 @@ textarea.translating {
 textarea:focus,
 select:focus,
 option:focus {
-  outline: 0;
+  /* outline: 0; */
 }
 
 .language {
@@ -124,15 +130,17 @@ button {
   background-color: rgb(25, 25, 35);
   border: none;
   border-radius: 10px;
-}
 
-button img {
-  height: calc(80% - 10px);
-  padding: 5px 5px 2px;
-}
+  height: 50px;
+  width: 50px;
+  padding: 7px 10px;
 
-button:hover {
   cursor: pointer;
+}
+
+button > * {
+  height: 100%;
+  width: 100%;
 }
 
 button:active,
@@ -140,9 +148,15 @@ button.active {
   background: rgb(45, 45, 70);
 }
 
+#spell-input-lang,
+#spell-output-lang {
+  width: 230px;
+}
+
 footer {
   width: 100%;
   padding: 10px 0;
+  margin-top: 30px;
 
   display: flex;
   justify-content: space-evenly;
@@ -150,7 +164,7 @@ footer {
 
 @media (max-width: 700px) {
   section {
-    grid-template-columns: 1fr;
+    grid-template-columns: 100%;
     grid-template-rows: 50px 1fr 1fr;
     grid-template-areas:
       'panel'
@@ -159,7 +173,6 @@ footer {
   }
 
   section > div {
-    width: 100%;
     height: 300px;
   }
 }

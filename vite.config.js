@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite'
 
 export default defineConfig({
-  base: '/translator/',
+  base: '/mini-translator/',
   build: {
     outDir: 'docs'
   }
