@@ -2,55 +2,98 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="icon.svg" />
-    <link rel="stylesheet" href="./style.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="favicon.svg" />
+    <meta
+      name="description"
+      content="Mini Translator is a simple translator that eases translation and spelling in more than 100 languages!"
+    />
+    <meta name="keyword" content="translator, simple, api, developer" />
+    <meta property="og:title" content="Mini Translator" />
+    <meta
+      property="og:description"
+      content="Mini translator is a simple translator that eases translation and spelling in more than 100 languages!"
+    />
+    <meta property="og:url" content="https://pabloc54.dev/mini-translator" />
+    <meta property="og:type" content="website" />
+    <link rel="stylesheet" href="./style.css" />
     <title>Mini Translator</title>
   </head>
   <body>
     <main>
       <header>
         <object
-          data="icon.svg"
+          data="favicon.svg"
           type="image/svg+xml"
           width="60"
           height="60"
+          aria-hidden="true"
         ></object>
         Mini Translator
       </header>
       <section>
         <div id="panel">
-          <button id="swap-languages">
-            <object data="swap.svg" type="image/svg+xml"></object>
+          <button id="swap-languages" title="Intercambiar lenguajes">
+            <object
+              data="swap.svg"
+              type="image/svg+xml"
+              aria-hidden="true"
+            ></object>
           </button>
         </div>
         <div id="input">
           <div class="language">
             <label for="input-lang">Lenguaje</label>
-            <select id="input-lang" name="input-lang"></select>
+            <select
+              id="input-lang"
+              name="input-lang"
+              title="Lenguaje de entrada"
+            ></select>
           </div>
           <textarea placeholder="¡Traduce lo que quieras!"></textarea>
           <div class="buttons">
-            <button id="spell-input" title="Escuchar input">
-              <object data="sound.svg" type="image/svg+xml"></object>
+            <button id="spell-input" title="Escuchar entrada">
+              <object
+                data="sound.svg"
+                type="image/svg+xml"
+                aria-hidden="true"
+              ></object>
             </button>
-            <select id="spell-input-lang"></select>
+            <select
+              id="spell-input-lang"
+              title="Voz para el lenguaje de entrada"
+            ></select>
           </div>
         </div>
         <div id="output">
           <div class="language">
-            <label for="input-lang">Lenguaje</label>
-            <select id="output-lang" name="output-lang"></select>
+            <label for="output-lang">Lenguaje</label>
+            <select
+              id="output-lang"
+              name="output-lang"
+              title="Lenguaje a traducir"
+            ></select>
           </div>
           <textarea placeholder="Translation..." readonly></textarea>
           <div class="buttons">
-            <button id="copy-output" title="Copiar output">
-              <object data="copy.svg" type="image/svg+xml"></object>
+            <button id="copy-output" title="Copiar traducción">
+              <object
+                data="copy.svg"
+                type="image/svg+xml"
+                aria-hidden="true"
+              ></object>
             </button>
-            <button id="spell-output" title="Escuchar output">
-              <object data="sound.svg" type="image/svg+xml"></object>
+            <button id="spell-output" title="Escuchar traducción">
+              <object
+                data="sound.svg"
+                type="image/svg+xml"
+                aria-hidden="true"
+              ></object>
             </button>
-            <select id="spell-output-lang"></select>
+            <select
+              id="spell-output-lang"
+              title="Voz para el lenguaje a traducir"
+            ></select>
           </div>
         </div>
       </section>
