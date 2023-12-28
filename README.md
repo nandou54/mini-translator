@@ -2,4 +2,4 @@
 
 Minimalistic translator made just for hobby
 
-> available on [github pages](https://pabloc54.dev/mini-translator/)
+> available on [github pages](https://nanndo54.dev/mini-translator/)
