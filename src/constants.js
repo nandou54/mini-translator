@@ -1,4 +1,4 @@
-const RAPID_API_KEY = import.meta.env.VITE_RAPID_API_KEY
+const RAPID_API_KEY = '1dc68f5c9amsh2763ce2f63be3e9p1e5047jsne0923875491b'
 
 const TRANSLATE_API_URL =
   'https://google-translate1.p.rapidapi.com/language/translate/v2'
