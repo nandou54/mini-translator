@@ -98,12 +98,6 @@ textarea.translating {
   color: rgb(150, 150, 150);
 }
 
-textarea:focus,
-select:focus,
-option:focus {
-  /* outline: 0; */
-}
-
 .language {
   display: flex;
   align-items: center;
