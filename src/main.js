@@ -1,6 +1,9 @@
+import { inject } from '@vercel/analytics'
 import { languageNames } from './constants'
 import { initLanguages, spellText, translateText } from './services'
 import { debounce } from './utils'
+
+inject()
 
 const $ = (selector) => document.querySelector(selector)
 
