@@ -1,5 +1,5 @@
-# ![github pages](https://img.icons8.com/color/30/000000/language-skill.png) Mini Translator
+# ![App icon](public/favicon.svg) Mini Translator
 
 Minimalistic translator made just for hobby
 
-> available on [github pages](https://nanndo54.dev/mini-translator/)
+> Deployed on [Vercel](https://translator.nanndo54.dev/)
