@@ -1,4 +1,18 @@
-@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;1,400&display=swap');
+@font-face {
+  font-display: swap;
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: 400;
+  src: url('/fonts/lato-v24-latin-regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-display: swap;
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: 900;
+  src: url('/fonts/lato-v24-latin-900.woff2') format('woff2');
+}
 
 body {
   margin: 0;
@@ -16,6 +30,10 @@ body * {
   font-size: 18px;
   line-height: 1.5em;
   box-sizing: border-box;
+}
+
+object {
+  pointer-events: none;
 }
 
 main {
