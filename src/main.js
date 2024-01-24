@@ -1,5 +1,5 @@
 import { inject } from '@vercel/analytics'
-import { languageNames } from './constants'
+import { LANGUAGE_NAMES } from './constants'
 import { initLanguages, spellText, translateText } from './services'
 import { debounce } from './utils'
 
@@ -21,40 +21,37 @@ const $spellInputLanguages = $('#spell-input-lang')
 const $spellOutputLanguages = $('#spell-output-lang')
 const $copyOutputButton = $('#copy-output')
 
+const onUpdate = (translate = false) => {
+  handleInputSpellLanguages()
+  handleOutputSpellLanguages()
+  if (translate) handleTranslate()
+}
+
 const initApp = () => {
-  initLanguages()
-    .then((response) => {
-      response.data.data.languages.sort((a, b) =>
-        languageNames.of(a.language) > languageNames.of(b.language) ? 1 : -1
-      )
+  initLanguages().then((languages) => {
+    languages.forEach(({ locale, name }) => {
+      const $language = document.createElement('option')
+      $language.value = locale
+      $language.innerText = name
 
-      response.data.data.languages.forEach(({ language }) => {
-        const $language = document.createElement('option')
-        $language.value = language
-        $language.innerText = languageNames.of(language)
-
-        $inputLanguages.appendChild($language)
+      $inputLanguages.appendChild($language)
+      if (locale !== 'auto')
         $outputLanguages.appendChild($language.cloneNode(true))
 
-        $input.value = localStorage.getItem('input') || ''
-        $inputLanguages.value = localStorage.getItem('inputLanguage') || 'es'
-        $outputLanguages.value = localStorage.getItem('outputLanguage') || 'en'
-      })
-
-      handleInputSpellLanguages()
-      handleOutputSpellLanguages()
-      handleTranslate()
+      $input.value = localStorage.getItem('input') || ''
+      $inputLanguages.value = localStorage.getItem('inputLanguage') || 'es'
+      $outputLanguages.value = localStorage.getItem('outputLanguage') || 'en'
     })
-    .catch(console.log)
+
+    onUpdate(true)
+  })
 }
 
 const handleChangeLanguage = () => {
   localStorage.setItem('inputLanguage', $inputLanguages.value)
   localStorage.setItem('outputLanguage', $outputLanguages.value)
 
-  handleInputSpellLanguages()
-  handleOutputSpellLanguages()
-  handleTranslate()
+  onUpdate(true)
 }
 
 const handleSwapLanguages = () => {
@@ -69,30 +66,28 @@ const handleSwapLanguages = () => {
   localStorage.setItem('inputLanguage', $inputLanguages.value)
   localStorage.setItem('outputLanguage', $outputLanguages.value)
 
-  handleInputSpellLanguages()
-  handleOutputSpellLanguages()
+  onUpdate(false)
 }
 
 const handleTranslate = debounce(() => {
   localStorage.setItem('input', $input.value)
-  if ($input.value === '') {
+  if (!$input.value) {
     $output.value = ''
     return
   }
 
-  const data = new URLSearchParams({
-    q: $input.value,
+  const data = {
+    text: $input.value,
     source: $inputLanguages.value,
     target: $outputLanguages.value
-  })
+  }
 
   $output.classList.add('translating')
 
   translateText(data)
-    .then((response) => {
-      $output.value = response.data.data.translations[0].translatedText
+    .then((translation) => {
+      $output.value = translation || ''
     })
-    .catch(console.log)
     .finally(() => {
       $output.classList.remove('translating')
     })
@@ -102,10 +97,9 @@ const handleInputSpellLanguages = () => {
   $spellInputLanguages.innerHTML = ''
   $spellInputLanguages.disabled = true
 
-  const SPELL_LANGUAGES = speechSynthesis.getVoices().map((voice) => voice.lang)
-  const languages = SPELL_LANGUAGES.filter((language) =>
-    language.startsWith($inputLanguages.value)
-  )
+  const languages = speechSynthesis
+    .getVoices()
+    .filter((voice) => voice.lang.startsWith($inputLanguages.value))
 
   if (!languages.length) {
     const $empty = document.createElement('option')
@@ -116,25 +110,24 @@ const handleInputSpellLanguages = () => {
     return
   }
 
-  $spellInputLanguages.disabled = false
-
   languages.forEach((language) => {
     const spellLanguage = document.createElement('option')
-    spellLanguage.value = language
-    spellLanguage.innerText = languageNames.of(language)
+    spellLanguage.value = language.name
+    spellLanguage.innerText = LANGUAGE_NAMES.of(language.lang)
 
     $spellInputLanguages.appendChild(spellLanguage)
   })
+
+  $spellInputLanguages.disabled = false
 }
 
 const handleOutputSpellLanguages = () => {
   $spellOutputLanguages.innerHTML = ''
   $spellOutputLanguages.disabled = true
 
-  const SPELL_LANGUAGES = speechSynthesis.getVoices().map((voice) => voice.lang)
-  const languages = SPELL_LANGUAGES.filter((language) =>
-    language.startsWith($outputLanguages.value)
-  )
+  const languages = speechSynthesis
+    .getVoices()
+    .filter((voice) => voice.lang.startsWith($outputLanguages.value))
 
   if (!languages.length) {
     const $empty = document.createElement('option')
@@ -145,33 +138,33 @@ const handleOutputSpellLanguages = () => {
     return
   }
 
-  $spellOutputLanguages.disabled = false
-
   languages.forEach((language) => {
     const spellLanguage = document.createElement('option')
-    spellLanguage.value = language
-    spellLanguage.innerText = languageNames.of(language)
+    spellLanguage.value = language.name
+    spellLanguage.innerText = LANGUAGE_NAMES.of(language.lang)
 
     $spellOutputLanguages.appendChild(spellLanguage)
   })
+
+  $spellOutputLanguages.disabled = false
 }
 
 const handleSpellInput = () => {
-  const language = $spellInputLanguages.value
-  if (!$input.value || !language) return
+  const languageName = $spellInputLanguages.value
+  if (!$input.value || !languageName) return
 
   $spellInputButton.classList.add('active')
 
-  spellText($input.value, language)
+  spellText($input.value, languageName)
 }
 
 const handleSpellOutput = () => {
-  const language = $spellOutputLanguages.value
-  if (!$output.value || !language) return
+  const languageName = $spellOutputLanguages.value
+  if (!$output.value || !languageName) return
 
   $spellOutputButton.classList.add('active')
 
-  spellText($output.value, language)
+  spellText($output.value, languageName)
 }
 
 const handleCopyOutput = () => {
@@ -184,11 +177,10 @@ window.addEventListener('load', initApp)
 $inputLanguages.addEventListener('change', handleChangeLanguage)
 $outputLanguages.addEventListener('change', handleChangeLanguage)
 $swapLanguagesButton.addEventListener('click', handleSwapLanguages)
-$input.addEventListener('keypress', handleTranslate)
+$input.addEventListener('keydown', handleTranslate)
 $spellInputButton.addEventListener('click', handleSpellInput)
 $spellOutputButton.addEventListener('click', handleSpellOutput)
 $copyOutputButton.addEventListener('click', handleCopyOutput)
 speechSynthesis.onvoiceschanged = () => {
-  handleInputSpellLanguages()
-  handleOutputSpellLanguages()
+  onUpdate(false)
 }

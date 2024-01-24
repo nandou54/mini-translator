@@ -10,6 +10,7 @@
   },
   "rules": {
     "space-before-function-paren": "off",
-    "add-numeric-separator": "off"
+    "add-numeric-separator": "off",
+    "curly": "off"
   }
 }
