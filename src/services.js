@@ -14,7 +14,7 @@ async function initLanguages() {
       name: locale === 'auto' ? 'Detectar' : LANGUAGE_NAMES.of(locale)
     }))
     languages.sort((a, b) =>
-      a.name === 'Detectar' || b.name === 'auto' || a.name > b.name ? 1 : -1
+      a.locale === 'auto' || b.locale === 'auto' || a.name > b.name ? 1 : -1
     )
 
     localStorage.setItem('languages', JSON.stringify(languages))
