@@ -9,12 +9,13 @@ async function initLanguages() {
     if (languages) return languages
 
     const response = await customAxios.get('/', TRANSLATE_API_OPTIONS)
-    languages = Object.values(response.data.supported_languages).map(
-      (locale) => ({ locale, name: LANGUAGE_NAMES.of(locale) })
+    languages = Object.values(response.data.supported_languages).map((locale) => ({
+      locale,
+      name: locale === 'auto' ? 'Detectar' : LANGUAGE_NAMES.of(locale)
+    }))
+    languages.sort((a, b) =>
+      a.name === 'Detectar' || b.name === 'auto' || a.name > b.name ? 1 : -1
     )
-    languages.sort((a, b) => {
-      return a.name === 'auto' || b.name === 'auto' || a.name > b.name ? 1 : -1
-    })
 
     localStorage.setItem('languages', JSON.stringify(languages))
 
@@ -26,11 +27,7 @@ async function initLanguages() {
 
 async function translateText(data) {
   try {
-    const response = await customAxios.post(
-      '/translate',
-      data,
-      TRANSLATE_API_OPTIONS
-    )
+    const response = await customAxios.post('/translate', data, TRANSLATE_API_OPTIONS)
     const translation = response.data.translations.translation
 
     return translation
@@ -42,9 +39,7 @@ async function translateText(data) {
 function spellText(text, languageName) {
   const utterThis = new SpeechSynthesisUtterance(text)
 
-  const voice = speechSynthesis
-    .getVoices()
-    .find((voice) => voice.name === languageName)
+  const voice = speechSynthesis.getVoices().find((voice) => voice.name === languageName)
   utterThis.voice = voice
 
   speechSynthesis.speak(utterThis)

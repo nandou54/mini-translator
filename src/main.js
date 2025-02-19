@@ -35,8 +35,7 @@ const initApp = () => {
       $language.innerText = name
 
       $inputLanguages.appendChild($language)
-      if (locale !== 'auto')
-        $outputLanguages.appendChild($language.cloneNode(true))
+      if (locale !== 'auto') $outputLanguages.appendChild($language.cloneNode(true))
 
       $input.value = localStorage.getItem('input') || ''
       $inputLanguages.value = localStorage.getItem('inputLanguage') || 'es'
